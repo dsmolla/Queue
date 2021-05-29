@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+<form class="form-group" method="POST">
+  {{ form.hidden_tag() }}
+  {{ form.question(class="form-control", rows="5", placeholder="Type your question here", style="margin-top: 10px;")}}
+  {{ form.submit(class="btn btn-success", style="margin-top: 10px;") }}
+</form> 
+
+
+{% endblock %}

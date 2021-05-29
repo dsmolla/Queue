@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+<div class="center">
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        {{ form.email(class="login", placeholder="Email")}} <br>
+        {{ form.password(class="login", placeholder="Password")}} <br>
+        {{ form.remember(id="remember") }} {{ form.remember.label }}
+        <a id="forgot-pwd" href="{{ url_for('register') }}">Forgot password?</a> <br>
+        {{ form.submit(class="btn btn-success", placeholder="Confirm Password")}} <br>
+        
+    </form>
+    
+</div>
+
+{% endblock %}

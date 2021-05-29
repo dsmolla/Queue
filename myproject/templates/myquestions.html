@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% for question in questions %}
+  <div class="shadow p-2 mb-0 rounded-3">
+    <div class="container-fluid">
+        <h1 class="display-5 fw-bold text-center"><a href="{{ url_for('edit', id=question.id }}">{{ question.title }}</a></h1>
+        <p class="fs-4">{{ question.content }}</p>
+        <span class="text-muted">{{ question.time_answered.strftime('%B %d, %Y-%H:%M') }}</span>
+
+      </div>
+    </div>
+  </div>  
+{% endfor %}
+
+
+<div>
+    {% for question in unanswered %}
+        <div class="col d-flex justify-content-center">
+            <div class="shadow-lg p-2 mb-5 bg-light rounded">
+                <div class="card text-dark bg-light border-light mb-3" style="width: 50rem;">
+                    <div class="card-header"> 
+                        <span class="fs-5">Dagmawi Molla</span>
+                        <small style="margin-left: 10px;" class="text-muted">{{ question.time_asked.strftime('%B %d, %Y-%H:%M') }}</small>
+                    </div>
+
+                    <div class="card-body">
+                        <h5 class="card-title text-center"><a class="text-decoration-none" href="{{ url_for('answer', id=question.id) }}">Title</a></h5>
+                        <p class="card-text">{{ question.question }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+{% endblock %}
+

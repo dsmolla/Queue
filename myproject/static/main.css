@@ -1,0 +1,51 @@
+body {
+    background-color: #f5f5f5;
+}
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    margin-top: 90px;
+  }
+
+
+.login {
+    width: 300px;
+    border-radius: .25rem;
+    border: 1px solid #ced4da;
+    height: calc(3.5rem + 2px);
+}
+
+.btn {
+    width: 300px;
+}
+
+#remember {
+    width: auto;
+    margin-left: 5px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+#forgot-pwd {
+    margin-left: 40px;
+}
+
+.bd-placeholder-img {
+    font-size: 1.125rem;
+    text-anchor: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+
+@media (min-width: 768px) {
+  .bd-placeholder-img-lg {
+    font-size: 3.5rem;
+  }
+}
+
+.btn-margin-right {
+  margin-right: 5px;
+}
