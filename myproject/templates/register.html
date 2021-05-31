@@ -1,18 +1,8 @@
-{% if form.errors.items() %}
-    <div class="alert alert-warning alert-dismissible fade show" role="alert">
-        {% for error in form.errors.values() %}
-            {{ ''.join(error) }}
-        {% endfor %}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-{% endif %}
-
 {% extends "base.html" %}
 {% block content %}
 
-
-<div class="center">
-    <form method="POST" class="row g-3">
+<div class="shadow-sm p-3 mb-0 bg-white rounded-3 position-absolute top-50 start-50 translate-middle">
+    <form class="container-fluid" method="POST">
         {{ form.hidden_tag() }}
         <div class="col-md-6">
             <span class="form-label">{{ form.fname.label }}</span>
@@ -38,11 +28,7 @@
         </div>
 
         {{ form.submit(class="btn btn-success", placeholder="Confirm Password", style="margin-left: 8px;")}}
-        
-
-
-    </form>
+    </form>    
 </div>
-
 
 {% endblock %}

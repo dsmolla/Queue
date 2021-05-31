@@ -1,5 +1,6 @@
+from flask.app import Flask
 from flask_wtf import FlaskForm
-from wtforms import (StringField, PasswordField, SubmitField, 
+from wtforms import (StringField, PasswordField, SubmitField,
                         BooleanField, TextAreaField, SelectField)
 from wtforms.validators import DataRequired, Email, EqualTo, Length
 from myproject.models import User
@@ -35,11 +36,17 @@ class RegistrationForm(FlaskForm):
 
 
 class AskForm(FlaskForm):
-    title = StringField("Title", validators=[DataRequired(), Length(max=150)])
-    question = TextAreaField(validators=[DataRequired(), Length(max=500)])
+    title = StringField("Title", validators=[DataRequired(), Length(max=200)])
+    question = TextAreaField(validators=[DataRequired(), Length(max=2000)])
     submit = SubmitField('Post Question')
 
 
 class AnswerForm(FlaskForm):
-    answer = TextAreaField('Type your answer here.', validators=[DataRequired(), Length(max=500)])
+    answer = TextAreaField('Type your answer here.', validators=[DataRequired(), Length(max=2000)])
     submit = SubmitField('Post Answer')
+
+
+class EditForm(FlaskForm):
+    title = StringField(validators=[DataRequired(), Length(max=200)])
+    question = TextAreaField(validators=[DataRequired(), Length(max=2000)])
+    submit = SubmitField('Update')

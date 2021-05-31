@@ -1,6 +1,9 @@
+from enum import unique
+from types import resolve_bases
 from myproject import db, login_manager
+from flask import abort
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import UserMixin
+from flask_login import UserMixin, current_user
 
 
 @login_manager.user_loader
@@ -12,28 +15,41 @@ class User(db.Model, UserMixin):
 
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.Text)
     fname = db.Column(db.Text)
     lname = db.Column(db.Text)
-    password_hashed = db.Column(db.Text)
-    role = db.relationship('Role', backref='user', lazy='dynamic')
+    email = db.Column(db.Text, unique=True)
+    password = db.Column(db.Text)
+    role = db.Column(db.Text)
 
-    def __init__(self, email, fname, lname, password, role):
+    def __init__(self, email, fname, lname, password, role='Student'):
         self.email = email
         self.fname = fname
         self.lname = lname
-        self.password_hashed = generate_password_hash(password)
+        self.password = generate_password_hash(password)
         self.role = role
 
-    def password_check(self, password):
-        return check_password_hash(self.password_hashed, password)
+    def password_check(self, password_entered):
+        return check_password_hash(self.password, password_entered)
+    
 
     def save(self):
         db.session.add(self)
         db.session.commit()
 
+    def delete(id):
+        db.session.delete(id)
+        db.session.commit()
+        
     def __repr__(self):
-        return f"User"
+        return f""" id: {self.id}\n
+                    Name: {self.fname} {self.lname}\n
+                    email: {self.email}\n
+                    role: {self.role}"""
+
+    @staticmethod
+    def name(id):
+        user = User.query.get(id)
+        return f"{user.fname} {user.lname}"
 
 
 class Question(db.Model):
@@ -41,20 +57,28 @@ class Question(db.Model):
     __tablename__ = 'questions'
     id = db.Column(db.Integer, primary_key=True)
     question = db.Column(db.Text)
+    title = db.Column(db.Text)
     asked_by = db.Column(db.Integer)
     answered_by = db.Column(db.Integer)
     answer = db.Column(db.Text)
     time_asked = db.Column(db.DateTime)
     time_answered = db.Column(db.DateTime)
+    resolved = db.Column(db.Boolean)
 
-    def __init__(self, question, asked_by, answered_by, answer, time_asked, time_answered):
+    def __init__(self, question, title, asked_by, answered_by, answer, time_asked, time_answered, resolved=False):
         self.question = question
+        self.title = title
         self.asked_by = asked_by
         self.answered_by = answered_by
         self.answer = answer
         self.time_asked = time_asked
         self.time_answered = time_answered
+        self.resolved = resolved
 
     def save(self):
         db.session.add(self)
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
         db.session.commit()
