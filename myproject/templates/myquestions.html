@@ -2,31 +2,31 @@
 {% block content %}
 
 {% for question in myquestions %}
-    <div class="shadow p-3 mb-0 rounded-3" style="margin: 40px; background-color: #aaddf7;">
-        <div class="container-fluid">
-            <form method="POST">
-                {% if question.resolved %}
-                    <button class="resolve" type="submit" name="unresolve" value="{{ question.id }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="20" height="20" fill="green" class="bi bi-check-circle" viewBox="0 0 16 16">
-                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
-                        </svg>
-                    </button>
-                {% else %}
-                    <button class="resolve" type="submit" name="resolve" value="{{ question.id }}">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="green" class="bi bi-check-circle" viewBox="0 0 16 16">
-                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
-                        <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"></path>
-                    </svg>
-                    </button>
-                {% endif %}
-            </form>
-            <h3 class="display-6 fw-bold text-center">
+    <div class="shadow bg-white p-3 mb-0 rounded-3" style="margin-top: 40px;">
+        <div class="container-fluid" style="padding: 0px;">
+            <h3 class="title fw-bold text-center">
                 <a href="{{ url_for('edit', id=question.id) }}" class="text-decoration-none">{{ question.title }}</a>
             </h3>
-            <p class="fs-5">{{ question.question }}</p>
+            <p class="question">{{ question.question }}</p>
             {% if question.answer %}
-                <p class="fs-6 border-top border-3">{{ question.answer }}</p>
-                <small class="text-muted">{{ delta(question.time_answered) }} -- {{ User.name(question.answered_by) }}</small> <br>
+                <form method="POST">
+                    <p class="answer border-top border-3">{{ question.answer }}</p>
+                    <small class="text-muted">{{ delta(question.time_answered) }} -- {{ User.name(question.answered_by) }}</small>
+                    {% if question.resolved %}
+                        <button class="resolve" type="submit" name="unresolve" value="{{ question.id }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="20" height="20" fill="green" class="bi bi-check-circle" viewBox="0 0 16 16">
+                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
+                            </svg>
+                        </button>
+                    {% else %}
+                        <button class="resolve" type="submit" name="resolve" value="{{ question.id }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="green" class="bi bi-check-circle" viewBox="0 0 16 16">
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
+                            <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"></path>
+                        </svg>
+                        </button>
+                    {% endif %}
+                </form>
             {% endif %}
         </div>
     </div> 

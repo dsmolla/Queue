@@ -3,12 +3,12 @@
 
 
 {% for question in questions %}
-  <div class="shadow p-3 mb-0 rounded-3" style="margin: 40px; background-color: #aaddf7;">
-    <div class="container-fluid">
-      <h3 class="display-6 fw-bold text-center">
+  <div class="shadow bg-white p-2 mb-0 rounded-3" style="margin-top: 40px;">
+    <div class="container-fluid" style="padding: 0px;">
+      <h3 class="title fw-bold text-center">
         <a href="{{ url_for('answer', id=question.id) }}" class="text-decoration-none">{{ question.title }}</a>
       </h3>
-      <p class="fs-5">{{ question.question }}</p>
+      <p class="question text-justify">{{ question.question }}</p>
     </div>
   </div>
 {% endfor %}

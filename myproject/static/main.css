@@ -5,7 +5,6 @@
     height: calc(3.5rem + 2px);
 }
 
-
 #remember {
     width: auto;
     margin-left: 5px;
@@ -14,7 +13,7 @@
 }
 
 #forgot-pwd {
-    margin-left: 40px;
+    margin-left: 35px;
 }
 
 .bd-placeholder-img {
@@ -25,11 +24,53 @@
     user-select: none;
   }
 
+.resolve {
+  background-color: transparent;
+  border: none;
+  padding: 0px;
+  float: right;
+  }
+
 @media (min-width: 768px) {
-  .bd-placeholder-img-lg {
-    font-size: 3.5rem;
+  .title {
+    font-size: 2rem !important;
+  }
+  .question {
+    font-size: 1.5rem !important;
+  }
+  .answer {
+    color: rgb(68, 0, 255);
+    font-size: 1.25rem;
+  }
+  .jumbo {
+    padding: 3rem !important;
+  }
+
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 1rem !important;
+  }
+  .question {
+    font-size: 1rem !important;
+  }
+  .answer {
+    color: rgb(68, 0, 255);
+    font-size: 1rem;
+  }
+  .jumbo {
+    padding-top: 2rem;
+    padding-left: 0.25rem !important;
+    padding-right: 0.25rem !important;
+  }
+
+  .title .question .answer {
+    font-family: 'Droid Sans'!important
   }
 }
+
+
 
 .btn-margin-right {
   margin-right: 5px;
@@ -41,11 +82,4 @@
 }
 
 
-.resolve {
-background-color: transparent;
-border:none;
-float: right;
-margin-right: -35px;
-margin-top: -10px;
-margin-bottom: 15px;
-}
+

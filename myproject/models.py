@@ -1,9 +1,6 @@
-from enum import unique
-from types import resolve_bases
 from myproject import db, login_manager
-from flask import abort
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import UserMixin, current_user
+from flask_login import UserMixin
 
 
 @login_manager.user_loader

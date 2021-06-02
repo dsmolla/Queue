@@ -81,7 +81,7 @@ def myquestions():
 def answer(id):
     form = AnswerForm()
     question = Question.query.get(id)
-    if question.answered_by != 0:
+    if question.resolved:
         abort(404)
 
     if form.validate_on_submit():
