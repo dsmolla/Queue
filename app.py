@@ -208,4 +208,4 @@ def error_404(e):
 
 
 if __name__ == '__main__':
-    app.run('192.168.1.119', 5000, debug=True)
+    app.run(debug=True)
