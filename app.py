@@ -1,9 +1,15 @@
+from inspect import formatannotation
 from flask import render_template, redirect, flash, request, url_for, abort
-from myproject.forms import LoginForm, RegistrationForm, AskForm, AnswerForm, EditForm
+from flask_wtf.recaptcha.validators import RECAPTCHA_ERROR_CODES
+from myproject.forms import (LoginForm, RegistrationForm, AskForm, AnswerForm, 
+                                EditForm, RequestResetForm, ResetPasswordForm,
+                                ChangePassword)
 from flask_login import login_user, login_required, logout_user, current_user
 from myproject.models import User, Question
 from datetime import datetime
-from myproject import app
+from myproject import app, mail, db
+from flask_mail import Message
+from werkzeug.security import check_password_hash, generate_password_hash
 
 
 def delta(date):
@@ -22,24 +28,11 @@ def delta(date):
             return f"{diff.seconds//3600}hr ago"
 
 
-"""
-def roles_allowed(roles):
-    if current_user != None:
-        if current_user.role in roles:
-            def inner(func):
-                func()
-        else:
-            def inner(func):
-                abort(403)
-
-        return inner
-"""
-
 @app.route('/')
 @login_required
 def home():
     questions = Question.query.filter_by(resolved=False)
-    return render_template('home.html', questions=questions, delta=delta, user=User)
+    return render_template('home.html', questions=questions, delta=delta, User=User)
 
 
 @app.route('/ask', methods=['GET', 'POST'])
@@ -93,7 +86,7 @@ def answer(id):
 
         return redirect(url_for('home'))
 
-    return render_template('answer.html', form=form, question=question.question)
+    return render_template('answer.html', form=form, question=question)
 
 
 @app.route('/edit/<int:id>', methods=['GET', 'POST'])
@@ -115,6 +108,11 @@ def edit(id):
         return redirect(url_for('myquestions'))
     
     return render_template('edit.html', form=form, question=question)
+
+
+@app.route('/admin', methods=['GET', 'POST'])
+def admin():
+    return render_template('admin.html', Question=Question, User=User)
 
 
 @app.route('/user/delete/<int:id>')
@@ -140,8 +138,23 @@ def delete_question(id):
     
     else:
         abort(403)
-    
-    
+
+
+@app.route('/change_password', methods=['GET','POST'])
+@login_required
+def change_password():
+    form = ChangePassword()
+    user = User.query.get(current_user.id)
+    if form.validate_on_submit():
+        if check_password_hash(user.password, form.cur_password.data):
+            user.password = generate_password_hash(form.new_password.data)
+            db.session.commit()
+            flash('Your password has been updated!', 'info')
+            return redirect(url_for('home'))
+        else:
+            flash('Incorrect Password!', 'error')
+        
+    return render_template('change_pwd.html', form=form)
         
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -151,9 +164,9 @@ def login():
 
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
-        if user is not None and user.password_check(form.password.data):
-            login_user(user, remember=form.remember.data)
+        if form.password_validate():
+            login_user(User.query.filter_by(email=form.email.data).first(), 
+                                            remember=form.remember.data)
 
             next = request.args.get('next')
 
@@ -169,16 +182,64 @@ def login():
     return render_template('login.html', form=form)
 
 
+def send_reset_email(user):
+    token = user.get_reset_token()
+    message = Message(
+                    'Password Reset Request', 
+                    sender='noreply@queue.com',
+                    recipients=[user.email],
+                    body= f"""To reset your password, visit the following link:
+                    {url_for('reset_password', token=token, _external=True)}
+                If you did not make this request then simply ignore this email."""
+                    )
+    print(user.email)
+    print(message.body)
+    mail.send(message)
+
+
+@app.route('/reset_password', methods=['GET', 'POST'])
+def request_reset():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    
+    form = RequestResetForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        send_reset_email(user)
+        flash('An email with instructions to reset your password has been sent', 'info')
+        return redirect(url_for('login'))
+
+    return render_template('reset_request.html', form=form)
+
+
+@app.route('/reset_password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    
+    user = User.verify_reset_token(token)
+    if not user:
+        flash('Invalid or expired token!', 'warning')
+        return redirect(url_for('request_reset'))
+
+    form = ResetPasswordForm()
+    if form.validate_on_submit():
+        hashed_password = generate_password_hash(form.password.data)
+        user.password = hashed_password
+        db.session.commit()
+        flash("Your password has been updated! You are now able to log in")
+
+        return redirect(url_for('login'))
+
+
+    return render_template('reset_password.html', form=form)
+
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
 
     if form.validate_on_submit():
-        if form.email_exists():
-            flash('The email you provided is already registered!')
-
-            return render_template('register.html', form=form)
-
         user = User(email=form.email.data, fname=form.fname.data.capitalize(),
                     lname=form.lname.data.capitalize(), password=form.password.data, role='Student')
         user.save()

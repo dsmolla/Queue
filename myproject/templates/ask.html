@@ -6,10 +6,9 @@
     <form class="form-group" method="POST">
         {{ form.hidden_tag() }}
         {{ form.title(class="title form-control fw-bold text-center", style="color: #0d6efd;", rows=5, placeholder="Question Title") }} <br>
-        {{ form.question(class="question form-control", rows=5, placeholder="Type your question here", style="margin-top: 5px;")}} <br>
+        {{ form.question(class="question form-control text-break text-justify", rows=5, placeholder="Type your question here", style="margin-top: 5px;")}} <br>
         {{ form.submit(class="btn btn-success", style="margin-top: 10px;")}}
-    </form>    
-    </div>
+    </form>
 </div>
 
 {% endblock %}

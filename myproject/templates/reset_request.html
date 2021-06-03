@@ -3,12 +3,9 @@
 
 <div class="shadow-lg bg-white p-3 mb-0 rounded-3 position-absolute top-50 start-50 translate-middle">
     
-    <form class="container-fluid" method="POST"><h3 class="text-center">Please login to continue</h3>
+    <form class="container-fluid" method="POST"><h3 class="text-center">Reset Password</h3>
         {{ form.hidden_tag() }}
         {{ form.email(class="cred", placeholder="Email", style="margin-top: 10px; margin-bottom: 10px;")}} <br>
-        {{ form.password(class="cred", placeholder="Password")}} <br>
-        {{ form.remember(id="remember") }} {{ form.remember.label }}
-        <a id="forgot-pwd" href="{{ url_for('request_reset') }}">Forgot password?</a> <br>
         {{ form.submit(class="btn btn-success", style="width: 300px;")}}
     </form>    
 </div>

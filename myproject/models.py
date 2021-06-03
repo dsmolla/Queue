@@ -1,6 +1,8 @@
-from myproject import db, login_manager
-from werkzeug.security import generate_password_hash, check_password_hash
+from myproject import db, login_manager, app
+from werkzeug.security import generate_password_hash
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flask_login import UserMixin
+
 
 
 @login_manager.user_loader
@@ -24,11 +26,11 @@ class User(db.Model, UserMixin):
         self.lname = lname
         self.password = generate_password_hash(password)
         self.role = role
-
-    def password_check(self, password_entered):
-        return check_password_hash(self.password, password_entered)
     
-
+    def get_reset_token(self, expires=300):
+        s = Serializer(app.secret_key, expires_in=expires)
+        return s.dumps({'user_id':self.id}).decode('utf-8')
+    
     def save(self):
         db.session.add(self)
         db.session.commit()
@@ -42,6 +44,15 @@ class User(db.Model, UserMixin):
                     Name: {self.fname} {self.lname}\n
                     email: {self.email}\n
                     role: {self.role}"""
+
+    @staticmethod
+    def verify_reset_token(token):
+        s = Serializer(app.secret_key)
+        try:
+            user_id = s.loads(token)['user_id']
+        except:
+            return None
+        return User.query.get(user_id)
 
     @staticmethod
     def name(id):

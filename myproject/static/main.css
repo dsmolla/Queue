@@ -1,4 +1,4 @@
-.login {
+.cred {
     width: 300px;
     border-radius: .25rem;
     border: 1px solid #ced4da;
@@ -27,10 +27,15 @@
 .resolve {
   background-color: transparent;
   border: none;
-  padding-left: 1px;
+  padding: 3px;
+  padding-top: 0px;
   margin-bottom: 10px;
-  margin-left: 5px;
+  margin-top: -3px;
   }
+
+.title .question .answer {
+  word-wrap: break-word !important;
+}
 
 @media (min-width: 768px) {
   .title {

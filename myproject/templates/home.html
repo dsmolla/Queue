@@ -5,10 +5,15 @@
 {% for question in questions %}
   <div class="shadow bg-white p-2 mb-0 rounded-3" style="margin-top: 40px;">
     <div class="container-fluid" style="padding: 0px;">
-      <h3 class="title fw-bold text-justify">
+      <h3 class="title fw-bold text-break text-center">
         <a href="{{ url_for('answer', id=question.id) }}" class="text-decoration-none">{{ question.title }}</a>
       </h3>
-      <p class="question text-justify">{{ question.question }}</p>
+      <p class="question text-break text-justify">{{ question.question }}</p>
+
+      {% if current_user.role == 'Teacher' or current_user.role == 'Admin' %}
+        <small class="text-muted">{{ delta(question.time_asked) }} -- {{ User.name(question.asked_by) }}</small>
+
+      {% endif %}
     </div>
   </div>
 {% endfor %}
