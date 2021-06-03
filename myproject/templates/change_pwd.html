@@ -5,9 +5,9 @@
     
     <form class="container-fluid" method="POST"><h3 class="text-center">Reset Password</h3>
         {{ form.hidden_tag() }}
-        {{ form.cur_password(class="cred", placeholder="Current Password")}} <br> <br>
-        {{ form.new_password(class="cred", placeholder="New Password")}} <br> <br>
-        {{ form.pass_conf(class="cred", placeholder="Confirm Password")}} <br> <br>
+        {{ form.cur_password(class="cred", placeholder="Current Password", style="margin-top: 10px;")}} <br>
+        {{ form.new_password(class="cred", placeholder="New Password", style="margin-top: 10px;")}} <br>
+        {{ form.pass_conf(class="cred", placeholder="Confirm Password", style="margin-top: 10px; margin-bottom: 10px;")}} <br>
         
         {{ form.submit(class="btn btn-success", style="width: 300px;")}}
     </form>    
